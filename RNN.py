@@ -1,7 +1,7 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Bidirectional, LSTM, Dense, Dropout, Reshape
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-
+from keras.models import Sequential
+from keras.layers import Bidirectional, LSTM, Dense, Dropout, Reshape
+from keras.preprocessing.image import ImageDataGenerator
+from evaluate import evaluate
 
 # Parameters
 img_width, img_height = 64, 64
@@ -17,7 +17,7 @@ train_datagen = ImageDataGenerator(
 )
 
 train_generator = train_datagen.flow_from_directory(
-    'CMPSC448FinalProjectPentium-main/data',
+    'data/train',
     target_size=(img_width, img_height),
     batch_size=32,
     class_mode='categorical')
@@ -41,3 +41,8 @@ model.fit(train_generator, epochs=20, steps_per_epoch=20)
 
 # Save the model
 model.save('rnn_image_classifier.keras')
+
+# Evaluate the model
+# pred_labels = model.predict_classes()
+# accuracy = evaluate(pred_labels)
+# print("Accuracy: ", accuracy)
