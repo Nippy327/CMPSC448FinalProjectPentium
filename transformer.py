@@ -9,8 +9,12 @@ import evaluate
 
 # Set up data loaders
 transform = transforms.Compose([
+    transforms.RandomHorizontalFlip(p=0.4),
+    transforms.RandomRotation(15),
+    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
+    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
 ])
 
 train_dataset = datasets.ImageFolder('data/train', transform=transform)
@@ -22,12 +26,13 @@ optimizer = optim.AdamW(model.parameters(), lr=1e-4)
 criterion = nn.CrossEntropyLoss()
 
 # Training loop
-num_epochs = 2
+num_epochs = 20
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model.to(device)
 
 for epoch in range(num_epochs):
     model.train()
+    print(epoch)
     for inputs, labels in train_loader:
         inputs, labels = inputs.to(device), labels.to(device)
         optimizer.zero_grad()
@@ -50,14 +55,15 @@ for inputs, labels in val_loader:
     for i in range(len(predicted)):
         pred_labels[i] = predicted[i].item()
         if pred_labels[i] == 0:
-            labeltxt = "Ice cream"
+            labeltxt = "cloudy"
         elif pred_labels[i] == 1:
-            labeltxt = "Pizza"
+            labeltxt = "rain"
         else:
-            labeltxt = "Sandwich"
+            labeltxt = "shine"
         print(f"Label {iterp} is {labeltxt}")
+        pred_labels[iterp] = labeltxt
         iterp += 1
 
 # Evaluate the predicted labels
-# accuracy = evaluate(pred_labels)
-# print("Accuracy: ", accuracy)
+accuracy = evaluate.evaluate(pred_labels)
+print("Accuracy: ", accuracy)

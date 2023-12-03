@@ -19,7 +19,7 @@ food_labels = {0: 'pizza', 1: 'sandwich', 2: 'sandwich', 3: 'sandwich', 4: 'sand
           107: 'ice_cream', 108: 'ice_cream', 109: 'ice_cream', 110: 'ice_cream', 111: 'ice_cream', 112: 'ice_cream',
           113: 'pizza', 114: 'ice_cream', 115: 'pizza'}
 
-rain_labels = {1: 'rain', 2: 'rain', 3: 'rain', 4: 'rain', 5: 'rain', 6: 'rain', 7: 'rain', 8: 'shine', 9: 'rain',
+weather_labels = {1: 'rain', 2: 'rain', 3: 'rain', 4: 'rain', 5: 'rain', 6: 'rain', 7: 'rain', 8: 'shine', 9: 'rain',
                10: 'shine', 11: 'shine', 12: 'rain', 13: 'shine', 14: 'shine', 15: 'rain', 16: 'rain', 17: 'cloudy',
                18: 'shine', 19: 'rain', 20: 'rain', 21: 'rain', 22: 'shine', 23: 'rain', 24: 'cloudy', 25: 'rain',
                26: 'shine', 27: 'cloudy', 28: 'cloudy', 29: 'cloudy', 30: 'rain', 31: 'rain', 32: 'rain', 33: 'shine',
@@ -51,14 +51,14 @@ def evaluate(pred_labels: dict):
     :param pred_labels: The predicted labels
     :return: Accuracy of the predicted labels
     """
-    labels = rain_labels
+    labels = weather_labels
     if len(pred_labels) != len(labels):
         raise ValueError("The length of the predicted labels is not equal to the length of the actual labels")
     if type(pred_labels) != dict:
         raise TypeError("The type of the predicted labels is not dict")
 
     correct = 0
-    for i in range(len(labels)):
+    for i in range(1, len(labels)):
         if pred_labels[i] == labels[i]:
             correct += 1
     return correct / 115
